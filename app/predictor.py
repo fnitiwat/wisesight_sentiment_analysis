@@ -62,7 +62,7 @@ class MySentimentModel:
         return numericalize_data(tokenized_words, self.vocab)
 
     def _padding(self, encoded_words: List[int]) -> List[int]:
-        features = np.zeros(self.max_lenght, dtype=int)
+        features = np.ones(self.max_lenght, dtype=int) * self.vocab["<pad>"]
         features[-len(encoded_words) :] = np.array(encoded_words)[: self.max_lenght]
         return features.tolist()
 
