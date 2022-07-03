@@ -1,4 +1,5 @@
 import torch
+import os
 import numpy as np
 from typing import List
 from pythainlp.tokenize import word_tokenize
@@ -27,7 +28,10 @@ class MySentimentModel:
             vocab_size=len(self.vocab),
             output_size=len(class_names),
         )
-        self.net.load_state_dict(torch.load(model_path))
+        if device=="cpu":
+         self.net.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+        else:
+            self.net.load_state_dict(torch.load(model_path))
         self.max_lenght = max_lenght
         self.class_names = class_names
         self.device = device
@@ -74,8 +78,7 @@ class Config:
         self.vocab_path = "../artifacts/vocab.pth"
         self.max_lenght = 748
         self.class_names = ["neg", "neu", "pos", "q"]
-        self.device = "cuda"
-
+        self.device = os.getenv("DEVICE", "cuda")
 
 config = Config()
 
